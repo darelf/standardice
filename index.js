@@ -1,7 +1,9 @@
 var events = require('events')
 var util = require('util')
 
-var dsplit = /(\d+)[dD](\d+)/
+/* Simple xDx dice parse */
+var dsplit = /(\d+)[dD](\d+)([-+]\d+)?/
+
 
 var StandardDice = function() {
   events.EventEmitter.call(this)
@@ -9,7 +11,7 @@ var StandardDice = function() {
 util.inherits(StandardDice, events.EventEmitter)
 
 StandardDice.prototype.basicRoll = function(die) {
-  return parseInt(Math.round(Math.random() * die))
+  return parseInt(Math.round(Math.random() * (die-1) + 1))
 }
 
 StandardDice.prototype.smartRoll = function(die) {

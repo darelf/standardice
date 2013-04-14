@@ -2,8 +2,8 @@ var SD = require('./index.js')
 var roller = new SD()
 
 // Basic Parse
-console.log("Rolling 2d6 with full results...")
-console.log( roller.basicParse("2d6"))
+console.log("Rolling 5d6 with full results...")
+console.log( roller.basicParse("5d6"))
 console.log("")
 // Basic Parse with total only
 console.log("Rolling 2d6 with the total only...")
