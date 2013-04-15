@@ -2,12 +2,20 @@ var SD = require('./index.js')
 var roller = new SD()
 
 // Basic Parse
-console.log("Rolling 5d6 with full results...")
+console.log("Rolling 5d6 with basic results...")
 console.log( roller.basicParse("5d6"))
 console.log("")
 // Basic Parse with total only
 console.log("Rolling 2d6 with the total only...")
 console.log( roller.basicTotal("2d6"))
+console.log("")
+// Basic Parse with basic results and total only for same dice
+console.log("Rolling 2d6+5 with basic results...")
+var d = roller.basicParse("2d6+5")
+console.log( d )
+console.log("")
+console.log("Same with total only...")
+console.log( roller.basicTotal(d) )
 console.log("")
 
 // By TN

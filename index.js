@@ -53,13 +53,18 @@ StandardDice.prototype.basicParse = function(dstr) {
       dice.push( {sides: dinfo[2]} )
     }
     retval = self.listRoll(dice)
+    if (dinfo[3])
+      retval.push({value: parseInt(dinfo[3])})
   }
   return retval
 }
 
 StandardDice.prototype.basicTotal = function(dstr) {
-  var dice = this.basicParse(dstr)
-  return dice.reduce(function(p,c,i,a) { return p.value + c.value })
+  var dice = dstr
+  if (!(dstr instanceof Array))
+    dice = this.basicParse(dstr)
+  var total = dice.reduce(function(p,c,i,a) { return (p.value ? p.value : p) + c.value })
+  return total
 }
 
 module.exports = StandardDice
