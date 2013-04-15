@@ -1,8 +1,7 @@
 var events = require('events')
 var util = require('util')
 
-/* Simple xDx dice parse */
-var dsplit = /(\d+)[dD](\d+)([-+]\d+)?/
+
 
 
 var StandardDice = function() {
@@ -10,22 +9,28 @@ var StandardDice = function() {
 }
 util.inherits(StandardDice, events.EventEmitter)
 
+StandardDice.prototype.dsplit = /(\d+)[dD](\d+)/
+
 StandardDice.prototype.basicRoll = function(die) {
   return parseInt(Math.round(Math.random() * (die-1) + 1))
 }
 
 StandardDice.prototype.smartRoll = function(die) {
   var retval = {value: 0, history:[]}
-  var d = this.basicRoll(die.sides)
-  if (die.explode) {
-    while (d >= die.explode) {
-      retval.value += d
-      retval.history.push(d)
-      d = this.basicRoll(die.sides)
+  if (die.sides) {
+    var d = this.basicRoll(die.sides)
+    if (die.explode) {
+      while (d >= die.explode) {
+        retval.value += d
+        retval.history.push(d)
+        d = this.basicRoll(die.sides)
+      }
     }
+    retval.value += d
+    retval.history.push(d)
+  } else {
+    retval = die
   }
-  retval.value += d
-  retval.history.push(d)
   return retval
 }
 
@@ -45,25 +50,32 @@ StandardDice.prototype.hitsByTN = function(dice, target) {
 
 StandardDice.prototype.basicParse = function(dstr) {
   var self = this
-  var retval = []
-  if(dsplit.test(dstr)) {
-    var dinfo = dsplit.exec(dstr)
-    var dice = []
-    for (var i = 0; i < dinfo[1]; i++) {
-      dice.push( {sides: dinfo[2]} )
+  var dice = []
+  if(self.dsplit.test(dstr)) {
+    var combos = dstr.split(/[+-]/)
+    console.log(combos)
+    for (var x = 0; x < combos.length; x++) {
+      if (/^\d+$/.test(combos[x])) {
+        dice.push({value: parseInt(combos[x])})
+      } else {
+        var dinfo = self.dsplit.exec(combos[x])
+        for (var i = 0; i < dinfo[1]; i++) {
+          dice.push( {sides: parseInt(dinfo[2])} )
+        }
+      }
     }
-    retval = self.listRoll(dice)
-    if (dinfo[3])
-      retval.push({value: parseInt(dinfo[3])})
   }
-  return retval
+  return dice
 }
 
 StandardDice.prototype.basicTotal = function(dstr) {
   var dice = dstr
-  if (!(dstr instanceof Array))
+  var rolls = dstr
+  if (!(dstr instanceof Array)) {
     dice = this.basicParse(dstr)
-  var total = dice.reduce(function(p,c,i,a) { return (p.value ? p.value : p) + c.value })
+    rolls = this.listRoll(dice)
+  }
+  var total = rolls.reduce(function(p,c,i,a) { return (p.value ? p.value : p) + c.value })
   return total
 }
 

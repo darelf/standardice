@@ -3,7 +3,7 @@ var roller = new SD()
 
 // Basic Parse
 console.log("Rolling 5d6 with basic results...")
-console.log( roller.basicParse("5d6"))
+console.log( roller.listRoll(roller.basicParse("5d6")) )
 console.log("")
 // Basic Parse with total only
 console.log("Rolling 2d6 with the total only...")
@@ -13,10 +13,18 @@ console.log("")
 console.log("Rolling 2d6+5 with basic results...")
 var d = roller.basicParse("2d6+5")
 console.log( d )
+d = roller.listRoll(d)
+console.log( d )
 console.log("")
 console.log("Same with total only...")
 console.log( roller.basicTotal(d) )
 console.log("")
+
+console.log("Rolling 2d6+5d12 with basic results...")
+d = roller.basicParse("2d6+5d12")
+console.log( d )
+console.log( roller.listRoll(d) )
+
 
 // By TN
 console.log("Rolling 5d10 keeping only 7 or higher...")
