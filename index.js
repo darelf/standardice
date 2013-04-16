@@ -1,9 +1,6 @@
 var events = require('events')
 var util = require('util')
 
-
-
-
 var StandardDice = function() {
   events.EventEmitter.call(this)
 }
@@ -53,7 +50,6 @@ StandardDice.prototype.basicParse = function(dstr) {
   var dice = []
   if(self.dsplit.test(dstr)) {
     var combos = dstr.split(/[+-]/)
-    console.log(combos)
     for (var x = 0; x < combos.length; x++) {
       if (/^\d+$/.test(combos[x])) {
         dice.push({value: parseInt(combos[x])})
