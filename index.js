@@ -7,6 +7,7 @@ var StandardDice = function() {
 util.inherits(StandardDice, events.EventEmitter)
 
 StandardDice.prototype.dsplit = /(\d+)[dD](\d+)/
+StandardDice.prototype.esplit = /\d+[dD]\d+(([eh])(\d+))/
 
 StandardDice.prototype.basicRoll = function(die) {
   return parseInt(Math.round(Math.random() * (die-1) + 1))
@@ -49,7 +50,7 @@ StandardDice.prototype.basicParse = function(dstr) {
   var self = this
   var dice = []
   if(self.dsplit.test(dstr)) {
-    var combos = dstr.split(/[+-]/)
+    var combos = dstr.split(/[-+]/)
     for (var x = 0; x < combos.length; x++) {
       var sign = dstr[dstr.indexOf(combos[x])-1]
       if (/^\d+$/.test(combos[x])) {
@@ -58,8 +59,14 @@ StandardDice.prototype.basicParse = function(dstr) {
         dice.push({value: parseInt(val)})
       } else {
         var dinfo = self.dsplit.exec(combos[x])
+        var einfo = self.esplit.exec(combos[x])
         for (var i = 0; i < dinfo[1]; i++) {
-          dice.push( {sides: parseInt(dinfo[2])} )
+          var d = {sides: parseInt(dinfo[2])}
+          if (einfo && einfo[1]) {
+            if (einfo[2] === 'e')
+              d.explode = parseInt(einfo[3])
+          }
+          dice.push( d )
         }
       }
     }
