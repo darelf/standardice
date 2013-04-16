@@ -51,8 +51,11 @@ StandardDice.prototype.basicParse = function(dstr) {
   if(self.dsplit.test(dstr)) {
     var combos = dstr.split(/[+-]/)
     for (var x = 0; x < combos.length; x++) {
+      var sign = dstr[dstr.indexOf(combos[x])-1]
       if (/^\d+$/.test(combos[x])) {
-        dice.push({value: parseInt(combos[x])})
+        var val = combos[x]
+        if (sign) val = sign + combos[x]
+        dice.push({value: parseInt(val)})
       } else {
         var dinfo = self.dsplit.exec(combos[x])
         for (var i = 0; i < dinfo[1]; i++) {

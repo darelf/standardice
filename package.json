@@ -1,6 +1,6 @@
 {
   "name": "standardice",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Standard RPG dice rolling",
   "main": "index.js",
   "repository": {
