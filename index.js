@@ -14,7 +14,7 @@ StandardDice.prototype.basicRoll = function(die) {
 }
 
 StandardDice.prototype.smartRoll = function(die) {
-  var retval = {value: 0, history:[]}
+  var retval = {sides: die.sides, value: 0, history:[]}
   if (die.sides) {
     var d = this.basicRoll(die.sides)
     if (die.explode) {
