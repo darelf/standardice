@@ -7,7 +7,6 @@ var StandardDice = function() {
 util.inherits(StandardDice, events.EventEmitter)
 
 StandardDice.prototype.dsplit = /(\d+)[dD](\d+)/
-StandardDice.prototype.esplit = /\d+[dD]\d+(([eh])(\d+))/
 
 StandardDice.prototype.basicRoll = function(die) {
   return parseInt(Math.round(Math.random() * (die-1) + 1))
@@ -19,13 +18,18 @@ StandardDice.prototype.smartRoll = function(die) {
     var d = this.basicRoll(die.sides)
     if (die.explode) {
       while (d >= die.explode) {
-        retval.value += d
         retval.history.push(d)
         d = this.basicRoll(die.sides)
       }
     }
-    retval.value += d
     retval.history.push(d)
+    var total_d = retval.history.reduce(function(p,c,i,a) { return p + c })
+    if ( die.tn ) {
+      if (total_d >= die.tn)
+        retval.value = total_d
+    } else {
+      retval.value = total_d
+    }
   } else {
     retval = die
   }
@@ -59,12 +63,15 @@ StandardDice.prototype.basicParse = function(dstr) {
         dice.push({value: parseInt(val)})
       } else {
         var dinfo = self.dsplit.exec(combos[x])
-        var einfo = self.esplit.exec(combos[x])
+        var eregex = /([ek])(\d+)/g
         for (var i = 0; i < dinfo[1]; i++) {
           var d = {sides: parseInt(dinfo[2])}
-          if (einfo && einfo[1]) {
-            if (einfo[2] === 'e')
-              d.explode = parseInt(einfo[3])
+          var einfo = []
+          while ((einfo = eregex.exec(combos[x].substring(dinfo[0].length))) !== null) {
+            if (einfo[1] === 'e')
+              d.explode = parseInt(einfo[2])
+            if (einfo[1] === 'k')
+              d.tn = parseInt(einfo[2])
           }
           dice.push( d )
         }
