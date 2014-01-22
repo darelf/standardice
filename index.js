@@ -97,7 +97,8 @@ StandardDice.prototype.basicTotal = function(dstr) {
     dice = this.basicParse(dstr)
     rolls = this.listRoll(dice)
   }
-  var total = rolls.reduce(function(p,c,i,a) { return (p.value ? p.value : p) + c.value })
+  console.log(rolls)
+  var total = rolls.reduce(function(p,c,i,a) { return ((p.value || p.value == 0) ? p.value : p) + c.value })
   return total
 }
 
