@@ -47,12 +47,10 @@ console.log( roller.listRoll(d) )
 
 // By TN
 console.log("Rolling 5d10 keeping only 7 or higher...")
-var dice = [{sides:10},{sides:10},{sides:10},{sides:10},{sides:10}]
-console.log(roller.hitsByTN(dice, 7))
+console.log(roller.listRoll( roller.basicParse("5d10k7") ))
 console.log("")
 
 // By TN with explode on 10
-console.log("Rolling 5d10 keeping only 7 or higher and exploding on 10...")
-var dice = [{sides:10,explode:10},{sides:10,explode:10},{sides:10,explode:10},{sides:10,explode:10},{sides:10,explode:10}]
-console.log(roller.hitsByTN(dice, 7))
+console.log("Rolling 5d10 keeping only 7 or higher and exploding on 9...")
+console.log(roller.listRoll( roller.basicParse("5d10k7e9") ))
 
