@@ -45,12 +45,16 @@ console.log( d )
 console.log( roller.listRoll(d) )
 
 
-// By TN
+// Keep By TN
 console.log("Rolling 5d10 keeping only 7 or higher...")
 console.log(roller.listRoll( roller.basicParse("5d10k7") ))
 console.log("")
 
-// By TN with explode on 10
+// Keep By TN with explode on 10
 console.log("Rolling 5d10 keeping only 7 or higher and exploding on 9...")
 console.log(roller.listRoll( roller.basicParse("5d10k7e9") ))
 
+// Count hits by TN
+console.log("Rolling 5d10 counting hits of 6 or higher... (5d10h6)")
+console.log(roller.listRoll( roller.basicParse("5d10h6") ))
+console.log("")

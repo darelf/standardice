@@ -22,10 +22,17 @@ StandardDice.prototype.smartRoll = function(die) {
         d = this.basicRoll(die.sides)
       }
     }
+    
     retval.history.push(d)
     var total_d = retval.history.reduce(function(p,c,i,a) { return p + c })
-    if ( die.tn ) {
-      if (total_d >= die.tn)
+    if (die.tn) {
+      if (d >= die.tn)
+        total_d = 1
+      else
+        total_d = 0
+    }
+    if ( die.keep ) {
+      if (total_d >= die.keep)
         retval.value = total_d
     } else {
       retval.value = total_d
@@ -63,7 +70,7 @@ StandardDice.prototype.basicParse = function(dstr) {
         dice.push({value: parseInt(val)})
       } else {
         var dinfo = self.dsplit.exec(combos[x])
-        var eregex = /([ek])(\d+)/g
+        var eregex = /([ehk])(\d+)/g
         for (var i = 0; i < dinfo[1]; i++) {
           var d = {sides: parseInt(dinfo[2])}
           var einfo = []
@@ -71,6 +78,8 @@ StandardDice.prototype.basicParse = function(dstr) {
             if (einfo[1] === 'e')
               d.explode = parseInt(einfo[2])
             if (einfo[1] === 'k')
+              d.keep = parseInt(einfo[2])
+            if (einfo[1] === 'h')
               d.tn = parseInt(einfo[2])
           }
           dice.push( d )
